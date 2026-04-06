@@ -14,6 +14,7 @@ import ModulesRoutes from "./(kambaz)/modules/routes.js";
 import AssignmentRoutes from "./(kambaz)/assignments/routes.js";
 import EnrollmentRoutes from "./(kambaz)/enrollments/routes.js";
 import QuizRoutes from "./(kambaz)/quizzes/routes.js";
+import QuizAttemptRoutes from "./(kambaz)/quiz-attempts/routes.js";
 
 const CONNECTION_STRING =
   process.env.DATABASE_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
@@ -53,6 +54,7 @@ ModulesRoutes(app, db);
 AssignmentRoutes(app, db);
 EnrollmentRoutes(app, db);
 QuizRoutes(app);
+QuizAttemptRoutes(app);
 
 Lab5(app);
 Hello(app);
