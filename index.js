@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import mongoose from "mongoose";
 import session from "express-session";
+import MongoStore from "connect-mongo";
 import cors from "cors";
 
 import Hello from "./Hello.js";
@@ -55,6 +56,10 @@ const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: CONNECTION_STRING,
+    collectionName: "sessions",
+  }),
   cookie: {
     httpOnly: true,
     secure: isProduction,
