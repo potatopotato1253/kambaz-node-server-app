@@ -23,26 +23,47 @@ mongoose.connect(CONNECTION_STRING);
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      const allowed =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/kambaz-next-js-sp26-git-.*\.vercel\.app$/.test(origin);
+
+      if (allowed) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`Not allowed by CORS: ${origin}`));
+    },
   })
 );
+
+const isProduction = process.env.SERVER_ENV !== "development";
+
+app.set("trust proxy", 1);
 
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+  },
 };
 
-if (process.env.SERVER_ENV !== "development") {
+if (isProduction) {
   sessionOptions.proxy = true;
-  sessionOptions.cookie = {
-    sameSite: "none",
-    secure: true,
-    domain: process.env.SERVER_URL,
-  };
 }
 
 app.use(session(sessionOptions));
