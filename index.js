@@ -3,24 +3,18 @@ import express from "express";
 import mongoose from "mongoose";
 import session from "express-session";
 import cors from "cors";
-
 import Hello from "./Hello.js";
 import Lab5 from "./Lab5/index.js";
 import db from "./(kambaz)/database/index.js";
-
 import UserRoutes from "./(kambaz)/users/routes.js";
 import CourseRoutes from "./(kambaz)/courses/routes.js";
 import ModulesRoutes from "./(kambaz)/modules/routes.js";
 import AssignmentRoutes from "./(kambaz)/assignments/routes.js";
 import EnrollmentRoutes from "./(kambaz)/enrollments/routes.js";
-import QuizRoutes from "./(kambaz)/quizzes/routes.js";
-import QuizAttemptRoutes from "./(kambaz)/quiz-attempts/routes.js";
 
-const CONNECTION_STRING =
-  process.env.DATABASE_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz";
 
+const CONNECTION_STRING =  process.env.DATABASE_CONNECTION_STRING || "mongodb://127.0.0.1:27017/kambaz"
 mongoose.connect(CONNECTION_STRING);
-
 const app = express();
 
 app.use(
@@ -53,8 +47,8 @@ CourseRoutes(app, db);
 ModulesRoutes(app, db);
 AssignmentRoutes(app, db);
 EnrollmentRoutes(app, db);
-QuizRoutes(app);
-QuizAttemptRoutes(app);
 
 Lab5(app);
 Hello(app);
+
+app.listen(process.env.PORT || 4000);
